@@ -43,9 +43,13 @@ if os.path.exists(config_path):
             log.error("Failed to create config ckpts directory. Using default.")
             annotator_ckpts_path = str(Path(here, "./ckpts"))
 else:
-    annotator_ckpts_path = str(Path(here, "./ckpts"))
+    import folder_paths
+    controlnet_aux_dirs = folder_paths.get_folder_paths("controlnet_aux")
+    print(f"⚠️ controlnet_aux_dirs= {controlnet_aux_dirs}")
+    controlnet_aux_dir = controlnet_aux_dirs[0]
+    annotator_ckpts_path = f"{controlnet_aux_dir}/ckpts"
     TEMP_DIR = tempfile.gettempdir()
-    USE_SYMLINKS = False
+    USE_SYMLINKS = True
     ORT_PROVIDERS = ["CUDAExecutionProvider", "DirectMLExecutionProvider", "OpenVINOExecutionProvider", "ROCMExecutionProvider", "CPUExecutionProvider", "CoreMLExecutionProvider"]
 
 os.environ['AUX_ANNOTATOR_CKPTS_PATH'] = os.getenv('AUX_ANNOTATOR_CKPTS_PATH', annotator_ckpts_path)
